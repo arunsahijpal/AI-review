@@ -98,6 +98,6 @@
     "require-dev": {
         "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
         "drupal/coder": "^8.3",
-        "drupal/core-dev": "^10.4"
+        "drupal/core-dev": "^11.1"
     }
 }
