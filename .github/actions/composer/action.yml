@@ -21,6 +21,7 @@ runs:
       run: composer validate --no-check-all
 
     - name: Clear Composer Cache
+      shell: bash
       run: composer clear-cache
 
 
