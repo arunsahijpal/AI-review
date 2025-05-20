@@ -33,10 +33,6 @@ runs:
           exit 1
         fi
 
-    - name: Install dependencies via composer
-      uses: "php-actions/composer@v6"
-      env:
-        COMPOSER: "composer.json"
-      with:
-        version: ${{ inputs.composer_version }}
-        args: "install --no-interaction --prefer-dist --ansi"
+    - name: Install dependencies
+      shell: bash
+      run: composer install --no-interaction --prefer-dist --ansi
