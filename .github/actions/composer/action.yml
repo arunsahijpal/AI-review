@@ -39,4 +39,4 @@ runs:
         COMPOSER: "composer.json"
       with:
         version: ${{ inputs.composer_version }}
-        args: "--ignore-platform-reqs --optimize-autoloader"
+        args: "install --no-interaction --prefer-dist --ansi"
