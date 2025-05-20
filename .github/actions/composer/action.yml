@@ -24,7 +24,6 @@ runs:
       shell: bash
       run: composer clear-cache
 
-
     - name: Check composer.lock
       shell: bash
       run: |
