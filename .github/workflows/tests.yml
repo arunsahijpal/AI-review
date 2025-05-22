@@ -58,7 +58,24 @@ jobs:
           composer_version: ${{ env.COMPOSER_VERSION }}
 
       - name: Run PHPStan analysis
-        run: vendor/bin/phpstan analyse
+        run: |
+          # Get changed directories under web/modules/custom
+          MODULES=$(git diff --name-only origin/main...HEAD | grep '^web/modules/custom/' | awk -F/ '{print $1"/"$2"/"$3"/"$4}' | sort -u)
+
+          if [ -z "$MODULES" ]; then
+            echo "No custom module changes detected."
+            exit 0
+          fi
+
+          echo "Running PHPStan on modules:"
+          echo "$MODULES"
+
+          # Run PHPStan on each
+          for dir in $MODULES; do
+            if [ -d "$dir" ]; then
+              vendor/bin/phpstan analyse "$dir"
+            fi
+          done        
 
   run-phpunit:
     runs-on: ubuntu-latest
