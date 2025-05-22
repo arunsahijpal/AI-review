@@ -297,18 +297,13 @@ The code to review is from {file_path}:
 
                 for comment in file_comments:
                     line_num = comment['line']
-                    mapped_line = self.find_closest_line(line_num, line_positions)
+                    position = line_positions.get(self.find_closest_line(line_num, line_positions))
 
-                    if mapped_line in line_positions:
-                        position = line_positions[mapped_line]
+                    if position is not None and isinstance(position, int):
                         comment_key = f"{file.filename}:{position}"
 
                         if comment_key in existing_comments:
                             logger.debug(f"Duplicate comment skipped at {comment_key}")
-                            continue
-
-                        if position is None or not isinstance(position, int):
-                            logger.warning(f"Invalid position for comment at line {line_num} in {file.filename}, skipping")
                             continue
 
                         comment_body = f"{comment['comment']}\n\n```suggestion\n{comment.get('suggestion', '')}\n```"
@@ -320,13 +315,14 @@ The code to review is from {file_path}:
                         })
                         logger.debug(f"Queued inline comment at position {position} for {file.filename}")
                     else:
-                        logger.warning(f"Skipping invalid comment at unmapped line {line_num} in {file.filename}")
+                        logger.warning(f"Invalid or unmappable line {line_num} in {file.filename}, adding as general comment")
                         comment_body = (
                             f"**In file `{file.filename}`, line {line_num}:**\n\n"
                             f"{comment['comment']}\n\n"
                             f"```suggestion\n{comment.get('suggestion', '')}\n```"
                         )
                         general_comments.append(comment_body)
+
 
 
             if draft_review_comments or general_comments or skipped_files:
